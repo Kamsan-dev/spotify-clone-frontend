@@ -1,0 +1,7 @@
+<header class="absolute top-5 right-8">
+  <div class="flex items-center space-x-3 bg-black text-white opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2">
+    <img [src]="imageUrl()" class="rounded-full w-10 h-10" alt="" />
+    <h2>{{ username() }}</h2>
+    <fa-icon [icon]="'right-from-bracket'" (click)="onLogoutClick($event)"></fa-icon>
+  </div>
+</header>

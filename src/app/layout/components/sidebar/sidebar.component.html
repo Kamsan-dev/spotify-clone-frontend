@@ -1,0 +1,18 @@
+<div class="text-gray-500 p-5 border-r border-gray-900 no-scrollbar h-screen w-[200px] pb-36">
+  <div class="space-y-4">
+    @for (menuLink of itemMenu1; track menuLink.label) {
+    <span class="flex items-center gap-4 hover:text-white cursor-pointer"> <fa-icon [icon]="menuLink.icon"></fa-icon> {{ menuLink.label }} </span>
+    }
+    <hr class="border-t-[0.1px] border-gray-900" />
+
+    @for (menuLink of itemMenu2; track menuLink.label) {
+    <span class="flex items-center gap-4 hover:text-white cursor-pointer"> <fa-icon [icon]="menuLink.icon"></fa-icon> {{ menuLink.label }} </span>
+    }
+
+    <hr class="border-t-[0.1px] border-gray-900" />
+
+    <span class="flex items-center gap-4 hover:text-white cursor-pointer"> Playlist..</span>
+    <span class="flex items-center gap-4 hover:text-white cursor-pointer"> Playlist.. </span>
+    <span class="flex items-center gap-4 hover:text-white cursor-pointer">Playlist.. </span>
+  </div>
+</div>
