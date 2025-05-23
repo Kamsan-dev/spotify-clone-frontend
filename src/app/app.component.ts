@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     this.initFontAwesome();
     this.listenToastService();
-    this.authService.initAuthentication();
+    //this.authService.initAuthentication();
   }
 
   private initFontAwesome(): void {

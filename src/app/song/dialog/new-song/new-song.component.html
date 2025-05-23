@@ -1,0 +1,10 @@
+<form [formGroup]="newSongForm" (ngSubmit)="onSubmit()">
+  <input type="text" formControlName="title" />
+  <input type="text" formControlName="artist" />
+  <input type="number" formControlName="duration" />
+
+  <input type="file" accept="audio/mpeg" (change)="onUploadFile($event.target)" />
+  <input type="file" accept="image/*" (change)="onUploadCover($event.target)" />
+
+  <button type="submit">Submit</button>
+</form>

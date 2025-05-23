@@ -6,11 +6,13 @@ import { environment } from '../../../environments/environment';
 import { State } from '../model/state.mode';
 import { User } from '../model/user.model';
 import { AuthService as Auth0Service } from '@auth0/auth0-angular';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   public http = inject(HttpClient);
+  public router = inject(Router);
 
   public location = inject(Location);
 
@@ -57,12 +59,16 @@ export class AuthService {
       )
       .subscribe((token) => {
         this.accessToken = token;
-        this.fetchUserData(false);
+        if (token === undefined) {
+          console.log('after f5');
+          this.fetchUserData(false);
+        }
       });
   }
 
   logout(): void {
     this.auth0Service.logout();
+    this.router.navigate(['/login']);
   }
 
   public isAuthenticated(): boolean {

@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { NewSongComponent } from '../../../song/dialog/new-song/new-song.component';
 
 export interface MenuItem {
   label: string;
@@ -11,12 +13,16 @@ export interface MenuItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [FontAwesomeModule, NewSongComponent],
+  providers: [DialogService],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent implements OnInit {
+  dialogService = inject(DialogService);
+  ref: DynamicDialogRef | undefined;
+
   itemMenu1: MenuItem[] = [];
   itemMenu2: MenuItem[] = [];
 
@@ -54,5 +60,17 @@ export class SidebarComponent implements OnInit {
         icon: 'heart',
       },
     ];
+  }
+
+  onSaveNewSong(event: MouseEvent | TouchEvent): void {
+    event.stopImmediatePropagation();
+    this.ref = this.dialogService.open(NewSongComponent, {
+      width: '40%',
+      header: 'Save a new song',
+      closable: true,
+      focusOnShow: true,
+      modal: true,
+      showHeader: true,
+    });
   }
 }
