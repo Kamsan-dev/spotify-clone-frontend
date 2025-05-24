@@ -8,6 +8,7 @@ export interface MenuItem {
   label: string;
   icon: IconProp;
   routerLink?: string;
+  command?: Function;
 }
 
 @Component({
@@ -48,6 +49,11 @@ export class SidebarComponent implements OnInit {
 
     this.itemMenu2 = [
       {
+        label: 'Save a new song',
+        icon: 'plus',
+        command: (event: MouseEvent | TouchEvent) => this.onSaveNewSong(event),
+      },
+      {
         label: 'Create Playlist',
         icon: 'plus',
       },
@@ -65,8 +71,8 @@ export class SidebarComponent implements OnInit {
   onSaveNewSong(event: MouseEvent | TouchEvent): void {
     event.stopImmediatePropagation();
     this.ref = this.dialogService.open(NewSongComponent, {
-      width: '40%',
-      header: 'Save a new song',
+      width: '60%',
+      header: 'Save a new song now !',
       closable: true,
       focusOnShow: true,
       modal: true,

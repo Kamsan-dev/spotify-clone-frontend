@@ -1,9 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { User } from '../../../../core/auth/model/user.model';
 import { AuthService } from '../../../../core/auth/service/auth.service';
 import { AvatarComponent } from '../avatar/avatar.component';
-import { User } from '../../../../core/auth/model/user.model';
-import { CommonModule, JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-playlist-header-bar',

@@ -5,17 +5,17 @@ export interface SaveSong {
   artist: SongArtistVO;
   duration: SongDurationVO;
   songContent?: SongContent;
-  songCover?: SongCover;
+  songCover?: NewSongCover;
 }
 
 export interface SongContent {
-  file: File;
-  fileContentType: string;
+  file?: File;
+  fileContentType?: string;
 }
 
 export interface SongCover {
-  file: File;
-  fileContentType: string;
+  file?: File;
+  fileContentType?: string;
 }
 export interface ReadSongInfo {
   title: SongTitleVO;
@@ -24,4 +24,9 @@ export interface ReadSongInfo {
   songCover?: SongCover;
   publicId: string;
   isFavorite: boolean;
+}
+
+export interface NewSongCover {
+  file?: File;
+  urlDisplay?: string;
 }

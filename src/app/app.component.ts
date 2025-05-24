@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { AuthService } from '../core/auth/service/auth.service';
@@ -36,6 +36,7 @@ export class AppComponent implements OnInit {
     this.toastService.sendSub.subscribe({
       next: (newMessage) => {
         if (newMessage && newMessage.summary !== this.toastService.INIT_STATE) {
+          console.log('message service add');
           this.messageService.add(newMessage);
         }
       },

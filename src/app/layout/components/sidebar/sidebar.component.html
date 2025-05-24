@@ -6,7 +6,9 @@
     <hr class="border-t-[0.1px] border-gray-900" />
 
     @for (menuLink of itemMenu2; track menuLink.label) {
-    <span class="flex items-center gap-4 hover:text-white cursor-pointer"> <fa-icon [icon]="menuLink.icon"></fa-icon> {{ menuLink.label }} </span>
+    <span class="flex items-center gap-4 hover:text-white cursor-pointer" (click)="menuLink?.command($event)">
+      <fa-icon [icon]="menuLink.icon"></fa-icon> {{ menuLink.label }}
+    </span>
     }
 
     <hr class="border-t-[0.1px] border-gray-900" />

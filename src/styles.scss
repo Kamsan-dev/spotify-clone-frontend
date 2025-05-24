@@ -1,4 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap');
+
+$spotifyGreen: #1db954;
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,7 +15,90 @@
     scrollbar-width: none;
   }
 }
+
+:root {
+  --font-family: 'Manrope', sans-serif; // sets for many PrimeNG components
+}
+
 body {
   margin: 0;
   background-color: black;
+  font-family: 'Manrope', sans-serif;
+}
+
+h1 {
+  margin-top: 0 !important;
+  margin-bottom: 15px !important;
+}
+
+h2 {
+  font-size: 1.125rem !important;
+  font-weight: 300 !important;
+  color: $spotifyGreen;
+  margin-top: 0;
+}
+
+.p-dialog .p-dialog-header {
+  background-color: #121212;
+
+  .p-dialog-title {
+    font-weight: 800;
+    font-size: 1.8rem;
+  }
+}
+
+.p-dialog .p-dialog-content {
+  background-color: #121212;
+}
+
+.p-dialog .p-dialog-footer {
+  background-color: #121212;
+}
+
+.p-dialog-header {
+  padding: 24px;
+}
+
+.p-dialog-footer {
+  border-radius: 0 0 12px 12px;
+  padding: 12px;
+}
+
+/* Input text */
+.p-inputtext {
+  color: #f1f1f1;
+  border: 1px solid #2d2d34;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+  font-family: var(--font-primary);
+  //background-color: #121212;
+  background-color: #2e2e33;
+
+  &.lightbg {
+    background-color: #1a1a1f;
+  }
+
+  &:not(textarea) {
+    height: 38px;
+  }
+}
+
+/* Focused state */
+.p-inputtext:focus {
+  border-color: $spotifyGreen;
+  box-shadow: 0 0 0 1px $spotifyGreen;
+  background-color: #1a1a1f;
+  outline: none;
+}
+
+/* Placeholder color */
+.p-inputtext::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
+/* Optional: hover */
+.p-inputtext:hover {
+  border-color: $spotifyGreen;
 }
