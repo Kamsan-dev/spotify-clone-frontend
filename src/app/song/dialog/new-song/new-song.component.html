@@ -1,56 +1,68 @@
-{{ songToCreate | json }}
 <div class="mb-3 tw">
-  <h2 class="mt-0">Provide the title's name and his author. We also need a cover that defines the song.</h2>
+  <h2 class="mt-0 mb-4">Provide the title's name and his author. We also need a cover that defines the song.</h2>
 
   <form [formGroup]="newSongForm" (ngSubmit)="onSubmit()">
     <input type="text" formControlName="title" class="input-full p-inputtext" placeholder="Title" />
+
+    @if (newSongForm.get('title')?.invalid && newSongForm.get('title')?.dirty) {
+    <small id="title-required" class="text-error">Title is required</small>
+    } @else {
     <div class="placeholder-validation"></div>
+    }
 
     <input type="text" formControlName="artist" class="input-full p-inputtext" placeholder="Artist's name" />
+    @if (newSongForm.get('artist')?.invalid && newSongForm.get('artist')?.dirty) {
+    <small id="title-required" class="text-error">Artist's name is required</small>
+    } @else {
     <div class="placeholder-validation"></div>
-    <input type="number" formControlName="duration" class="input-full p-inputtext" placeholder="Song duration" />
-    <div class="placeholder-validation"></div>
+    }
 
-    <div class="flex flex-row gap-4 flex-wrap w-full justify-center">
-      <div class="relative inline-block cursor-pointer mt-4 w-fit">
-        <input
-          id="fileUpload"
-          type="file"
-          accept=".wav,.mp3"
-          formControlName="cover"
-          (change)="onUploadFile($event.target)"
-          class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
-        />
-        <div class="bg-[#1db954] text-black font-semibold py-2 px-4 rounded-md shadow hover:bg-[#1ed760] transition select-none z-0">Choose your audio track</div>
+    <div class="flex justify-evenly items-center mt-4">
+      <div class="flex flex-row gap-4 flex-wrap justify-center">
+        <div class="relative inline-block cursor-pointer mt-4 w-fit">
+          <input
+            id="fileUpload"
+            type="file"
+            accept=".wav,.mp3"
+            formControlName="file"
+            (change)="onUploadFile($event.target)"
+            class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+          />
+          <div class="bg-[#1db954] text-black font-semibold py-2 px-4 rounded-md shadow hover:bg-[#1ed760] transition select-none z-0">Choose your audio track</div>
+        </div>
+
+        <div class="relative inline-block cursor-pointer mt-4 w-fit">
+          <input
+            id="coverUpload"
+            type="file"
+            accept=".jpg,.jpeg,.png,.svg"
+            formControlName="cover"
+            (change)="onUploadCover($event.target)"
+            class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+          />
+          <div class="bg-[#1db954] text-black font-semibold py-2 px-4 rounded-md shadow hover:bg-[#1ed760] transition select-none z-0">Choose your cover</div>
+        </div>
       </div>
 
-      <div class="relative inline-block cursor-pointer mt-4 w-fit">
-        <input
-          id="fileUpload"
-          type="file"
-          accept=".jpg,.jpeg,.png,.svg"
-          formControlName="cover"
-          (change)="onUploadCover($event.target)"
-          class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
-        />
-        <div class="bg-[#1db954] text-black font-semibold py-2 px-4 rounded-md shadow hover:bg-[#1ed760] transition select-none z-0">Choose your cover</div>
+      <div class="flex flex-col gap-4 justify-center">
+        @if (fileName().length > 0){
+        <span class="font-semibold text-xl">{{ fileName() }}</span>
+        }
+        <div class="aspect-[4/3] w-[200px] bg-cover bg-center bg-no-repeat rounded-2xl overflow-hidden" [style.background-image]="'url(' + songCover() + ')'"></div>
       </div>
     </div>
 
-    <div class="mt-3">
-      <button type="submit">Submit</button>
+    <div class="mt-3 w-full flex justify-end">
+      <button
+        [disabled]="newSongForm.invalid || loading()"
+        type="submit"
+        class="bg-transparent hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded-full cursor-pointer"
+        [class.p-disabled]="newSongForm.invalid || loading()"
+      >
+        @if (loading()) {
+        <fa-icon class="mr-2" icon="circle-notch" animation="spin"></fa-icon>
+        } Save song
+      </button>
     </div>
   </form>
 </div>
-@if (songCover().length > 0 || fileName().length > 0) {
-<div class="flex flex-row gap-4 flex-wrap w-full justify-center">
-  <span>{{ fileName() }}</span>
-  <!-- <div
-    class="aspect-[4/3] bg-cover bg-center rounded-2xl overflow-hidden w-full max-w-md"
-    [style.background-image]="'url(' + songCover() + ')'"
-    [style.width]="'200px'"
-    [style.background-repeat]="'no-repeat'"
-  ></div> -->
-  <div class="aspect-[4/3] w-[200px] bg-cover bg-center bg-no-repeat rounded-2xl overflow-hidden" [style.background-image]="'url(' + songCover() + ')'"></div>
-</div>
-}

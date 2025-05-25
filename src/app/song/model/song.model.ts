@@ -3,7 +3,6 @@ import { SongArtistVO, SongDurationVO, SongTitleVO } from './song-vo.model';
 export interface SaveSong {
   title: SongTitleVO;
   artist: SongArtistVO;
-  duration: SongDurationVO;
   songContent?: SongContent;
   songCover?: NewSongCover;
 }

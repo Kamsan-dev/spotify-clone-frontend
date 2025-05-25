@@ -38,6 +38,10 @@ h2 {
   margin-top: 0;
 }
 
+.text-error {
+  color: #f24b5b;
+}
+
 .p-dialog .p-dialog-header {
   background-color: #121212;
 
@@ -49,6 +53,7 @@ h2 {
 
 .p-dialog .p-dialog-content {
   background-color: #121212;
+  padding-bottom: 0;
 }
 
 .p-dialog .p-dialog-footer {
