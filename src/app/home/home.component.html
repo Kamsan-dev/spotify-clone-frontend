@@ -1,5 +1,7 @@
-<app-playlist-view></app-playlist-view>
+<app-playlist-header-bar [headerType]="'home'" />
 <div class="m-4">
+  <h1 class="text-2xl font-bold">Recommanded for you</h1>
+  @if(songs() && songs()!.length > 0){
   <div class="songs-grid">
     @for (song of songs(); track song.publicId){
     <div class="w-fit">
@@ -7,4 +9,9 @@
     </div>
     }
   </div>
+  } @else {
+  <div class="flex justify-center items-center">
+    <fa-icon icon="circle-notch" animation="spin" class="text-green-600 text-4xl"></fa-icon>
+  </div>
+  }
 </div>

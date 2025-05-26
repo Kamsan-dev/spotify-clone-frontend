@@ -4,6 +4,7 @@ import { State } from '../../core/auth/model/state.mode';
 import { ReadSongInfo, SaveSong } from './model/song.model';
 import { environment } from '../../environments/environment';
 import { createPaginationOption, Page, Pageable, Pagination } from '../../core/auth/model/request.model';
+import { delay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -34,10 +35,13 @@ export class SongService {
 
   public getAll(pageRequest: Pagination): void {
     let params = createPaginationOption(pageRequest);
-    this.http.get<Page<ReadSongInfo>>(`${environment.API_URL}/songs/get-all`, { params }).subscribe({
-      next: (songs: Page<ReadSongInfo>) => this.getAll$.set(State.Builder<Page<ReadSongInfo>>().forSuccess(songs)),
-      error: (err: HttpErrorResponse) => this.getAll$.set(State.Builder<Page<ReadSongInfo>>().forError(err)),
-    });
+    this.http
+      .get<Page<ReadSongInfo>>(`${environment.API_URL}/songs/get-all`, { params })
+      .pipe(delay(800))
+      .subscribe({
+        next: (songs: Page<ReadSongInfo>) => this.getAll$.set(State.Builder<Page<ReadSongInfo>>().forSuccess(songs)),
+        error: (err: HttpErrorResponse) => this.getAll$.set(State.Builder<Page<ReadSongInfo>>().forError(err)),
+      });
   }
 
   public resetAll(): void {

@@ -1,19 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, OnInit, signal, WritableSignal } from '@angular/core';
 import { User } from '../../../../core/auth/model/user.model';
 import { AuthService } from '../../../../core/auth/service/auth.service';
 import { AvatarComponent } from '../avatar/avatar.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PlaylistCardComponent } from '../../../../shared/components/playlist-card/playlist-card.component';
+
+declare type HeaderType = 'playlist' | 'home';
 
 @Component({
   selector: 'app-playlist-header-bar',
   standalone: true,
-  imports: [AvatarComponent, CommonModule],
+  imports: [AvatarComponent, CommonModule, FontAwesomeModule, PlaylistCardComponent],
   templateUrl: './playlist-header-bar.component.html',
   styleUrl: './playlist-header-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaylistHeaderBarComponent implements OnInit {
+  headerType = input<HeaderType>('playlist');
   private http = inject(HttpClient);
   public authService = inject(AuthService);
 

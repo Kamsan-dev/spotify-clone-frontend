@@ -1,16 +1,17 @@
-import { ChangeDetectionStrategy, Component, effect, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { SidebarComponent } from '../layout/components/sidebar/sidebar.component';
-import { PlaylistViewComponent } from '../layout/components/playlist-view/playlist-view.component';
-import { SongCardComponent } from '../../shared/components/song-card/song-card.component';
-import { SongService } from '../song/song.service';
-import { ReadSongInfo } from '../song/model/song.model';
+import { ChangeDetectionStrategy, Component, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Pagination } from '../../core/auth/model/request.model';
+import { SongCardComponent } from '../../shared/components/song-card/song-card.component';
+import { PlaylistHeaderBarComponent } from '../layout/components/playlist-header-bar/playlist-header-bar.component';
+import { SidebarComponent } from '../layout/components/sidebar/sidebar.component';
 import { ToastService } from '../layout/toast.service';
+import { ReadSongInfo } from '../song/model/song.model';
+import { SongService } from '../song/song.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [SidebarComponent, PlaylistViewComponent, SongCardComponent],
+  imports: [SidebarComponent, PlaylistHeaderBarComponent, SongCardComponent, FontAwesomeModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
