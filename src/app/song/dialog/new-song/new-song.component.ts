@@ -64,7 +64,7 @@ export class NewSongComponent implements OnDestroy {
 
   private initForm(): void {
     this.newSongForm = this.fb.nonNullable.group({
-      title: [this.songToCreate.title.value, Validators.required],
+      title: [{ value: this.songToCreate.title.value, disabled: true }, Validators.required],
       artist: [this.songToCreate.artist.value, Validators.required],
       file: ['', Validators.required],
       cover: ['', Validators.required],
@@ -100,7 +100,8 @@ export class NewSongComponent implements OnDestroy {
     const file = this.extractFileFromTarget(target);
     if (file !== null) {
       this.songToCreate.songContent!.file = file;
-      // this.newSongForm.get('file')?.setValue(file.name);
+      this.newSongForm.get('title')?.setValue(file.name);
+      this.newSongForm.get('title')?.enable();
       this.fileName.set(file.name);
     }
   }

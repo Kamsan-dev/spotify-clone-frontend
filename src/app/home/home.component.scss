@@ -1,0 +1,5 @@
+.songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 12rem);
+  gap: 10px;
+}

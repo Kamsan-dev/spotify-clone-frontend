@@ -6,11 +6,13 @@ import { fontAwesomeIcons } from '../shared/font-awesome-icon';
 import { ToastService } from './layout/toast.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { SidebarComponent } from './layout/components/sidebar/sidebar.component';
+import { LoginComponent } from '../core/auth/components/login/login.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ToastModule],
+  imports: [RouterOutlet, ToastModule, SidebarComponent, LoginComponent],
   providers: [MessageService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -18,7 +20,7 @@ import { ToastModule } from 'primeng/toast';
 })
 export class AppComponent implements OnInit {
   private faIconLibrary: FaIconLibrary = inject(FaIconLibrary);
-  private authService = inject(AuthService);
+  public authService = inject(AuthService);
   private toastService: ToastService = inject(ToastService);
   private messageService = inject(MessageService);
 

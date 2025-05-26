@@ -1,4 +1,14 @@
 <p-toast position="bottom-center"></p-toast>
-<div class="tw">
-  <router-outlet />
+@if (authService.isAuthenticated()){
+<div class="h-screen overflow-hidden">
+  <main class="flex">
+    <app-sidebar></app-sidebar>
+    <div class="flex-grow h-screen overflow-y-scroll no-scrollbar">
+      <router-outlet />
+    </div>
+  </main>
+  <!-- <div class="sticky bottom-0">
+        <app-player></app-player>
+    </div> -->
 </div>
+} @else {<app-login /> }

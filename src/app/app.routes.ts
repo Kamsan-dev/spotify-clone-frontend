@@ -5,7 +5,7 @@ import { authenticationGuard } from '../core/auth/guard/authentication.guard';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'home',
     component: HomeComponent,
     canActivate: [authenticationGuard],
   },

@@ -1,9 +1,10 @@
-<div class="h-screen overflow-hidden">
-  <main class="flex">
-    <app-sidebar></app-sidebar>
-    <app-playlist-view class="grow"></app-playlist-view>
-  </main>
-  <!-- <div class="sticky bottom-0">
-        <app-player></app-player>
-    </div> -->
+<app-playlist-view></app-playlist-view>
+<div class="m-4">
+  <div class="songs-grid">
+    @for (song of songs(); track song.publicId){
+    <div class="w-fit">
+      <app-song-card [song]="song"></app-song-card>
+    </div>
+    }
+  </div>
 </div>

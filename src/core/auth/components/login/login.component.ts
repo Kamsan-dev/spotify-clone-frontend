@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
       .subscribe((token) => {
         this.authService.accessToken = token;
         this.authService.fetchUserData(false);
-        this.router.navigate(['']); // Redirect to home if already logged in
+        this.router.navigate(['/home']); // Redirect to home if already logged in
       });
   }
 }

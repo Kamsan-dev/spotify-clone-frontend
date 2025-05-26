@@ -20,7 +20,7 @@ export interface ReadSongInfo {
   title: SongTitleVO;
   artist: SongArtistVO;
   duration: SongDurationVO;
-  songCover?: SongCover;
+  cover?: SongCover;
   publicId: string;
   isFavorite: boolean;
 }
