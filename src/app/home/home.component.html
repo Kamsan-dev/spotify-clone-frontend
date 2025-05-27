@@ -5,7 +5,7 @@
   <div class="songs-grid">
     @for (song of songs(); track song.publicId){
     <div class="w-fit">
-      <app-song-card [song]="song"></app-song-card>
+      <app-song-card [song]="song" (click)="onPlaySong(song)"></app-song-card>
     </div>
     }
   </div>

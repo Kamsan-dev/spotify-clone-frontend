@@ -1,0 +1,53 @@
+<div class="h-24 bg-[#121212] player-grid items-center px-2 md:px-8">
+  <!-- LEFT SECTION -->
+  @if (song()){
+  <div class="flex items-center space-x-4">
+    <img class="h-16 w-16 md:inline rounded" [src]="'data:' + song()!.cover?.fileContentType + ';base64,' + song()!.cover?.file" alt="Song cover" alt="" />
+    <div>
+      <p class="w-36 lg:w-64 truncate">{{ song()!.title.value }}</p>
+      <p class="text-gray-500 w-40">{{ song()!.artist.value }}</p>
+    </div>
+  </div>
+  }
+
+  <!-- CENTER -->
+
+  <div class="flex flex-col items-center space-y-2 h-full">
+    <div class="flex items-center justify-evenly gap-[2.5rem] pt-4">
+      <fa-icon [icon]="'shuffle'" class="pt-3"></fa-icon>
+      <fa-icon [icon]="'backward-step'" class="pt-3"></fa-icon>
+
+      @if (isPlaying()){
+      <fa-icon [icon]="'pause'" class="pt-3" (click)="pause($event)"></fa-icon>
+      } @else {
+      <fa-icon [icon]="'play'" class="pt-3" (click)="play($event)"></fa-icon>
+      }
+
+      <fa-icon [icon]="'forward-step'" class="pt-3"></fa-icon>
+      <fa-icon [icon]="'arrow-rotate-left'" class="pt-3"></fa-icon>
+    </div>
+
+    <div class="flex items-center justify-center w-full gap-2">
+      <span class="text-sm">{{ progress() | durationHowlerFormat }}</span>
+      <input
+        type="range"
+        class="w-full h-1 accent-blue-500 bg-black rounded-lg cursor-pointer"
+        [min]="0"
+        [max]="duration()"
+        striped="true"
+        [ngModel]="progress()"
+        (input)="onSeekPosition($event)"
+      />
+      @if (song()){
+      <span class="text-sm">{{ song()!.duration.value | duration }}</span>
+      }
+    </div>
+  </div>
+
+  <!-- RIGHT SIDE  -->
+
+  <div class="flex items-center justify-end space-x-3 md:space-x-3 h-full">
+    <fa-icon [icon]="volumeIcon()" class=""></fa-icon>
+    <input type="range" min="0" max="1" name="volume" (change)="onVolumeUpdate($event)" step="0.01" [ngModel]="currentVolume()" />
+  </div>
+</div>
