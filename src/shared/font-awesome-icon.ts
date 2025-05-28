@@ -3,6 +3,7 @@ import {
   faBackwardStep,
   faBuilding,
   faCircleNotch,
+  faCirclePlus,
   faForwardStep,
   faHeart,
   faHouse,
@@ -40,4 +41,5 @@ export const fontAwesomeIcons: IconDefinition[] = [
   faVolumeXmark,
   faVolumeLow,
   faVolumeHigh,
+  faCirclePlus,
 ];

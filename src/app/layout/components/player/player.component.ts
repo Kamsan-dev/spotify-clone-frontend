@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, signal, WritableSignal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, effect, ElementRef, inject, signal, ViewChild, WritableSignal } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ToastService } from '../../toast.service';
 import { SongService } from '../../../song/song.service';
@@ -18,7 +18,7 @@ import { Icon, IconProp } from '@fortawesome/fontawesome-svg-core';
   styleUrl: './player.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerComponent {
+export class PlayerComponent implements AfterViewInit {
   songService = inject(SongService);
   toastService = inject(ToastService);
   songContentService = inject(SongContentService);
@@ -31,13 +31,26 @@ export class PlayerComponent {
 
   currentVolume = signal(0.2);
   volumeIcon: WritableSignal<IconProp> = signal('volume-high');
+  private volumeBeforeMute = 0;
   progress = signal(0.0);
   duration = signal(0.0);
   private animationFrameId: number | undefined;
 
+  // Detect WebKit-based browsers to apply browser-specific styles for the range input
+  isWebkit = /AppleWebKit/.test(navigator.userAgent);
+
+  @ViewChild('audioSlider') audioSlider!: ElementRef<HTMLInputElement>;
+  @ViewChild('volumeSlider') volumeSlider!: ElementRef<HTMLInputElement>;
+
   constructor() {
     this.listenToFetchSongContent();
     this.listenToFetchSongInfo();
+  }
+  public ngAfterViewInit(): void {
+    /* visual update for webkit browsers */
+    /* update volume slider on init component lifecycle */
+    const v = (this.currentVolume() * 100) / 1;
+    updateSliderVisual(this.volumeSlider, v.toString());
   }
 
   private listenToFetchSongContent(): void {
@@ -75,13 +88,14 @@ export class PlayerComponent {
     const newHowlInstance = new Howl({
       src: [`data:${this.songContent?.fileContentType};base64,${this.songContent?.file}`],
       html5: true,
-      volume: this.currentVolume(),
+      volume: 0.2,
       onplay: () => {
         this.trackProgress();
         this.onPlay();
       },
       onpause: () => this.onPause(),
       onvolume: () => this.setVolumeIcon(),
+      onmute: () => this.setVolumeIcon(),
       onend: () => this.onPause(),
     });
 
@@ -122,20 +136,47 @@ export class PlayerComponent {
     if (this.currentHowlInstance) {
       this.currentHowlInstance.seek(Number(value));
       this.progress.set(Number(value));
+
+      /* visual update for webkit browsers */
+      const v = (this.progress() * 100) / this.duration();
+      updateSliderVisual(this.audioSlider, v.toString());
     }
   }
 
   public onVolumeUpdate(event: Event): void {
     const value = Number((event.target as HTMLInputElement).value);
     if (this.currentHowlInstance) {
+      this.currentVolume.set(value);
       this.currentHowlInstance.volume(value);
+
+      /* visual update for webkit browsers */
+      const v = (this.currentVolume() * 100) / 1;
+      updateSliderVisual(this.volumeSlider, v.toString());
+    }
+  }
+
+  public onMuteVolume(event: TouchEvent | MouseEvent): void {
+    event.stopImmediatePropagation();
+    if (this.currentHowlInstance) {
+      if (this.currentHowlInstance.mute()) {
+        this.currentHowlInstance.mute(false);
+        this.currentHowlInstance.volume(this.volumeBeforeMute);
+        this.currentVolume.set(this.volumeBeforeMute);
+      } else {
+        this.volumeBeforeMute = this.currentHowlInstance.volume();
+        this.currentHowlInstance.mute(true);
+        this.currentVolume.set(0);
+      }
+      /* visual update for webkit browsers */
+      const v = (this.currentVolume() * 100) / 1;
+      updateSliderVisual(this.volumeSlider, v.toString());
     }
   }
 
   private setVolumeIcon(): void {
     if (this.currentHowlInstance) {
       const volume = this.currentHowlInstance.volume();
-      if (volume === 0) {
+      if (volume === 0 || this.currentHowlInstance.mute()) {
         this.volumeIcon.set('volume-xmark');
       } else if (volume > 0 && volume <= 0.3) {
         this.volumeIcon.set('volume-low');
@@ -151,9 +192,19 @@ export class PlayerComponent {
         const progress = this.currentHowlInstance.seek() as number;
         this.progress.set(Math.floor(progress));
         this.duration.set(this.currentHowlInstance.duration());
+
+        /* visual update for webkit browsers */
+        const v = (this.progress() * 100) / this.duration();
+        this.audioSlider.nativeElement.style.setProperty('--value', v.toString() + '%');
       }
       this.animationFrameId = requestAnimationFrame(updateProgress);
     };
     this.animationFrameId = requestAnimationFrame(updateProgress);
+  }
+}
+
+function updateSliderVisual(el: ElementRef<HTMLInputElement>, v: string) {
+  if (el.nativeElement) {
+    el.nativeElement.style.setProperty('--value', v + '%');
   }
 }

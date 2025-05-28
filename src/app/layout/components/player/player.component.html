@@ -1,45 +1,50 @@
-<div class="h-24 bg-[#121212] player-grid items-center px-2 md:px-8">
+<div class="h-24 bg-[#121212] grid grid-cols-2 md:grid-cols-3 items-center px-2 md:px-8 text-xs md:text-base">
   <!-- LEFT SECTION -->
-  @if (song()){
-  <div class="flex items-center space-x-4">
-    <img class="h-16 w-16 md:inline rounded" [src]="'data:' + song()!.cover?.fileContentType + ';base64,' + song()!.cover?.file" alt="Song cover" alt="" />
-    <div>
-      <p class="w-36 lg:w-64 truncate">{{ song()!.title.value }}</p>
-      <p class="text-gray-500 w-40">{{ song()!.artist.value }}</p>
+  <div class="items-center gap-4 hidden md:flex" [class.opacity-0]="!song()" [class.pointer-events-none]="!song()">
+    @if (song()){
+    <img class="h-16 w-16 rounded hidden md:block" [src]="'data:' + song()!.cover?.fileContentType + ';base64,' + song()!.cover?.file" alt="Song cover" alt="" />
+    <div class="flex justify-center items-center gap-4">
+      <div class="flex flex-col gap-[2px] flex-wrap">
+        <span class="truncate w-40">{{ song()!.title.value }}</span>
+        <span class="text-gray-500">{{ song()!.artist.value }}</span>
+      </div>
+      <fa-icon [icon]="'circle-plus'" class="icon fa-fw"></fa-icon>
     </div>
+    }
   </div>
-  }
 
   <!-- CENTER -->
 
   <div class="flex flex-col items-center space-y-2 h-full">
-    <div class="flex items-center justify-evenly gap-[2.5rem] pt-4">
-      <fa-icon [icon]="'shuffle'" class="pt-3"></fa-icon>
-      <fa-icon [icon]="'backward-step'" class="pt-3"></fa-icon>
+    <div class="flex items-center justify-evenly gap-[6px] pt-4">
+      <fa-icon [icon]="'shuffle'" class="icon fa-fw"></fa-icon>
+      <fa-icon [icon]="'backward-step'" class="icon fa-fw"></fa-icon>
 
       @if (isPlaying()){
-      <fa-icon [icon]="'pause'" class="pt-3" (click)="pause($event)"></fa-icon>
+      <fa-icon [icon]="'pause'" class="icon--major fa-fw" (click)="pause($event)"></fa-icon>
       } @else {
-      <fa-icon [icon]="'play'" class="pt-3" (click)="play($event)"></fa-icon>
+      <fa-icon [icon]="'play'" class="icon--major fa-fw play-icon-svg" (click)="play($event)"></fa-icon>
       }
 
-      <fa-icon [icon]="'forward-step'" class="pt-3"></fa-icon>
-      <fa-icon [icon]="'arrow-rotate-left'" class="pt-3"></fa-icon>
+      <fa-icon [icon]="'forward-step'" class="icon fa-fw"></fa-icon>
+      <fa-icon [icon]="'arrow-rotate-left'" class="icon fa-fw"></fa-icon>
     </div>
 
-    <div class="flex items-center justify-center w-full gap-2">
-      <span class="text-sm">{{ progress() | durationHowlerFormat }}</span>
+    <div class="flex items-center justify-center w-full gap-2 max-w-[600px]">
+      <span class="small-text">{{ progress() | durationHowlerFormat }}</span>
       <input
+        #audioSlider
         type="range"
-        class="w-full h-1 accent-blue-500 bg-black rounded-lg cursor-pointer"
+        class="w-full custom-range"
         [min]="0"
         [max]="duration()"
         striped="true"
         [ngModel]="progress()"
         (input)="onSeekPosition($event)"
+        [class.webkit]="isWebkit"
       />
       @if (song()){
-      <span class="text-sm">{{ song()!.duration.value | duration }}</span>
+      <span class="small-text">{{ song()!.duration.value | duration }}</span>
       }
     </div>
   </div>
@@ -47,7 +52,18 @@
   <!-- RIGHT SIDE  -->
 
   <div class="flex items-center justify-end space-x-3 md:space-x-3 h-full">
-    <fa-icon [icon]="volumeIcon()" class=""></fa-icon>
-    <input type="range" min="0" max="1" name="volume" (change)="onVolumeUpdate($event)" step="0.01" [ngModel]="currentVolume()" />
+    <fa-icon [icon]="volumeIcon()" class="icon fa-fw hidden md:block" (click)="onMuteVolume($event)"></fa-icon>
+    <input
+      #volumeSlider
+      type="range"
+      min="0"
+      max="1"
+      name="volume"
+      (input)="onVolumeUpdate($event)"
+      step="0.01"
+      [ngModel]="currentVolume()"
+      [class.webkit]="isWebkit"
+      class=""
+    />
   </div>
 </div>

@@ -1,4 +1,114 @@
+$colorGrey: rgb(148, 163, 184);
+$spotifyGreen: #1db954;
+
 .player-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.icon,
+.icon--major {
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  font-size: 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.icon {
+  color: $colorGrey;
+  &:hover {
+    color: white;
+  }
+}
+
+.icon--major {
+  color: black;
+  background-color: white;
+  border-radius: 100%;
+}
+
+.small-text {
+  color: $colorGrey;
+  font-size: 0.8rem;
+}
+
+input[type='range'] {
+  -webkit-appearance: none; // Chrome & Safari
+  appearance: none;
+  height: 4px;
+  cursor: pointer;
+
+  &.webkit {
+    // Default track with simulated progress using CSS variable
+    background: linear-gradient(to right, white var(--value, 0%), #333 var(--value, 0%));
+
+    &:hover {
+      background: linear-gradient(to right, $spotifyGreen var(--value, 0%), #333 var(--value, 0%));
+    }
+  }
+
+  // Chrome, Safari, Edge (WebKit/Blink)
+  &::-webkit-slider-runnable-track {
+    // background: darkgrey;
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 12px;
+    width: 12px;
+    background: white;
+    border-radius: 50%;
+    border: none;
+    margin-top: -4px; // aligns thumb vertically to the track
+    transition: opacity 0.2s;
+    opacity: 0.0001;
+    pointer-events: auto;
+  }
+
+  &:hover::-webkit-slider-thumb {
+    opacity: 1;
+  }
+
+  // Firefox
+  &::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  &::-moz-range-progress {
+    background-color: white;
+    height: 4px;
+  }
+
+  &:hover::-moz-range-progress {
+    background-color: $spotifyGreen;
+  }
+
+  &::-moz-range-thumb {
+    height: 12px;
+    width: 12px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0.0001;
+    transition: opacity 0.2s;
+    pointer-events: auto;
+  }
+
+  &:hover::-moz-range-thumb {
+    opacity: 1;
+  }
 }
