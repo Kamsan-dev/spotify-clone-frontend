@@ -31,7 +31,6 @@ export class PlayerSongSectionComponent implements OnInit {
         const state = this.playlistService.getAllSig();
         if (state.status === 'OK' && state.value) {
           this.currentMenuItems = this.loadMenu(state.value);
-          console.log(this.currentMenuItems);
         } else if (state.status === 'ERROR') {
           this.toastService.send({
             severity: 'error',
@@ -57,16 +56,20 @@ export class PlayerSongSectionComponent implements OnInit {
     menu = playlists.map((p) => ({
       label: p.title,
       image: image,
-      command: () => this.addCurrentSongToPlaylist(p.publicId, this.song()?.publicId!),
-      isFavorite: this.song()?.favorite,
+      command: () => this.addOrDeleteSongPlaylist(p.publicId, this.song()?.publicId!),
       publicId: p.publicId,
     }));
 
     return menu;
   }
 
-  public addCurrentSongToPlaylist(playlistPublicId: string, songPublicId: string): void {
-    this.playlistService.add(playlistPublicId, songPublicId);
+  public addOrDeleteSongPlaylist(playlistPublicId: string, songPublicId: string): void {
+    const bool = this.isSongInPlaylist(playlistPublicId);
+    if (!bool) {
+      this.playlistService.add(playlistPublicId, songPublicId);
+    } else {
+      this.playlistService.delete(playlistPublicId, songPublicId);
+    }
   }
 
   public isSongInPlaylist(playlistPublicId: string): boolean {

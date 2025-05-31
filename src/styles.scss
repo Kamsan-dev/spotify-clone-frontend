@@ -119,3 +119,10 @@ h2 {
 .green-spotify {
   color: $spotifyGreen !important;
 }
+
+.p-menu.p-menu-overlay {
+  background-color: #292929;
+  .p-menuitem-content:hover {
+    background-color: #121212;
+  }
+}

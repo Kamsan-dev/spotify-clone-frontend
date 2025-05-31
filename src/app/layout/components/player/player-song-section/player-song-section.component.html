@@ -1,21 +1,23 @@
-<div class="items-center gap-4 hidden md:flex" [class.opacity-0]="!song()" [class.pointer-events-none]="!song()">
+<div class="items-center gap-4 flex" [class.opacity-0]="!song()" [class.pointer-events-none]="!song()">
   @if (song()){
   <img class="h-16 w-16 rounded hidden md:block" [src]="'data:' + song()!.cover?.fileContentType + ';base64,' + song()!.cover?.file" alt="Song cover" alt="" />
   <div class="flex justify-center items-center gap-4">
     <div class="flex flex-col gap-[2px] flex-wrap">
-      <span class="truncate font-bold">{{ song()!.title.value }}</span>
+      <span class="truncate font-bold max-w-60 w-fit">{{ song()!.title.value }}</span>
       <span class="text-gray-500">{{ song()!.artist.value }}</span>
     </div>
     <div class="">
       <p-menu #menu [model]="currentMenuItems" [popup]="true" styleClass="mt-1" appendTo="body">
         <ng-template let-item pTemplate="item">
-          <div class="flex items-center gap-2 p-3">
-            <img [src]="item.image" alt="playlist cover" width="40" height="40" class="rounded" />
-            <span>{{ item.label }}</span>
+          <div class="flex items-center gap-2 p-3 justify-between">
+            <div class="flex items-center">
+              <img [src]="item.image" alt="playlist cover" width="40" height="40" class="rounded mr-1" />
+              <span>{{ item.label }}</span>
+            </div>
             @if (isSongInPlaylist(item.publicId)){
-            <fa-icon [icon]="'circle-check'" class="icon fa-fw green-spotify"></fa-icon>
+            <fa-icon [icon]="'circle-check'" class="p-2 fa-fw green-spotify cursor-pointer"></fa-icon>
             } @else {
-            <fa-icon [icon]="'circle-plus'" class="icon fa-fw"></fa-icon>
+            <fa-icon [icon]="'circle-plus'" class="p-2 fa-fw cursor-pointer"></fa-icon>
             }
           </div>
         </ng-template>

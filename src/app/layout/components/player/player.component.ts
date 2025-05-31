@@ -83,7 +83,6 @@ export class PlayerComponent implements AfterViewInit {
     effect(
       () => {
         this.song.set(this.songContentService.songPlayed());
-        console.log(this.song());
       },
       { allowSignalWrites: true }
     );
