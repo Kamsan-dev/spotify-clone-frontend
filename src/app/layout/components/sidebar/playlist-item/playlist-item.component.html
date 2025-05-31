@@ -1,0 +1,31 @@
+<div class="mx-2 items-center flex gap-4 group hover:bg-[#121212] rounded cursor-pointer p-2" (click)="onPlaylistClick($event)">
+  <!-- IMAGE OR ICON WRAPPER -->
+  <div class="relative w-12 h-12">
+    @if (!playlist().isLikedSongs) {
+    <img
+      class="h-full w-full rounded object-cover group-hover:brightness-50"
+      [src]="'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/blue-piano-jazz-album-cover-design-template-b3fe4f17d37fa0d5a73729b937675b9b_screen.jpg?ts=1698243712'"
+      alt="Song cover"
+    />
+    } @else {
+    <div class="w-full h-full flex rounded items-center justify-center bg-gradient-to-br from-purple-500 to-green-200 group-hover:brightness-50">
+      <fa-icon [icon]="'heart'" class="text-white text-3xl"></fa-icon>
+    </div>
+    }
+
+    <!-- PLAY BUTTON (hidden by default, shows on hover) -->
+    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+      <div class="rounded-full p-2">
+        <fa-icon [icon]="'play'" class="text-white text-xl"></fa-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEXTS -->
+  <div class="flex items-center gap-4">
+    <div class="flex flex-col gap-[2px]">
+      <span class="text-xl text-white">{{ playlist().title }}</span>
+      <span class="text-gray-500 text-sm"> Playlist <span>&bull;</span> {{ owner() }} </span>
+    </div>
+  </div>
+</div>

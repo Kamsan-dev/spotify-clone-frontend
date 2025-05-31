@@ -9,11 +9,16 @@ import { Howl } from 'howler';
 import { FormsModule } from '@angular/forms';
 import { DurationHowlerPipe } from '../../../../shared/pipe/duration-format.pipe';
 import { Icon, IconProp } from '@fortawesome/fontawesome-svg-core';
+import { MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
+import { DisplayPlaylist } from '../../../playlist/model/playlist.model';
+import { PlaylistService } from '../../../playlist/playlist.service';
+import { PlayerSongSectionComponent } from './player-song-section/player-song-section.component';
 
 @Component({
   selector: 'app-player',
   standalone: true,
-  imports: [FontAwesomeModule, DurationPipe, FormsModule, DurationHowlerPipe],
+  imports: [FontAwesomeModule, DurationPipe, FormsModule, DurationHowlerPipe, MenuModule, PlayerSongSectionComponent],
   templateUrl: './player.component.html',
   styleUrl: './player.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +27,7 @@ export class PlayerComponent implements AfterViewInit {
   songService = inject(SongService);
   toastService = inject(ToastService);
   songContentService = inject(SongContentService);
+  playlistService = inject(PlaylistService);
 
   songContent: SongContent | undefined = undefined;
   song: WritableSignal<ReadSongInfo | undefined> = signal(undefined);
@@ -84,7 +90,6 @@ export class PlayerComponent implements AfterViewInit {
   }
 
   private initHowlInstance(): void {
-    console.log('initHowlinstance');
     const newHowlInstance = new Howl({
       src: [`data:${this.songContent?.fileContentType};base64,${this.songContent?.file}`],
       html5: true,

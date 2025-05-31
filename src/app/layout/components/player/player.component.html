@@ -1,17 +1,6 @@
-<div class="h-24 bg-[#121212] grid grid-cols-2 md:grid-cols-3 items-center px-2 md:px-8 text-xs md:text-base">
+<div class="h-24 bg-[#121212] grid grid-cols-2 md:grid-cols-3 items-center px-2 text-xs md:text-base">
   <!-- LEFT SECTION -->
-  <div class="items-center gap-4 hidden md:flex" [class.opacity-0]="!song()" [class.pointer-events-none]="!song()">
-    @if (song()){
-    <img class="h-16 w-16 rounded hidden md:block" [src]="'data:' + song()!.cover?.fileContentType + ';base64,' + song()!.cover?.file" alt="Song cover" alt="" />
-    <div class="flex justify-center items-center gap-4">
-      <div class="flex flex-col gap-[2px] flex-wrap">
-        <span class="truncate w-40">{{ song()!.title.value }}</span>
-        <span class="text-gray-500">{{ song()!.artist.value }}</span>
-      </div>
-      <fa-icon [icon]="'circle-plus'" class="icon fa-fw"></fa-icon>
-    </div>
-    }
-  </div>
+  <app-player-song-section [song]="song()"></app-player-song-section>
 
   <!-- CENTER -->
 

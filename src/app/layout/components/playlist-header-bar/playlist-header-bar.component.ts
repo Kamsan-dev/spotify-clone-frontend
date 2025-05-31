@@ -6,13 +6,14 @@ import { AuthService } from '../../../../core/auth/service/auth.service';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PlaylistCardComponent } from '../../../../shared/components/playlist-card/playlist-card.component';
+import { PlayerSongSectionComponent } from '../player/player-song-section/player-song-section.component';
 
 declare type HeaderType = 'playlist' | 'home';
 
 @Component({
   selector: 'app-playlist-header-bar',
   standalone: true,
-  imports: [AvatarComponent, CommonModule, FontAwesomeModule, PlaylistCardComponent],
+  imports: [AvatarComponent, CommonModule, FontAwesomeModule, PlaylistCardComponent, PlayerSongSectionComponent],
   templateUrl: './playlist-header-bar.component.html',
   styleUrl: './playlist-header-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

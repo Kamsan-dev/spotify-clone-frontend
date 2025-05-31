@@ -22,7 +22,10 @@ export interface ReadSongInfo {
   duration: SongDurationVO;
   cover?: SongCover;
   publicId: string;
-  isFavorite: boolean;
+  favorite: boolean;
+  dateAdded: Date;
+  playlistPublicId: string;
+  playlistPublicIds: Array<String>;
 }
 
 export interface NewSongCover {

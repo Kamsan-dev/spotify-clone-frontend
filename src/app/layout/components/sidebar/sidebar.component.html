@@ -1,5 +1,5 @@
-<div class="text-gray-500 p-5 border-r border-gray-900 no-scrollbar h-screen w-[200px] pb-36">
-  <div class="space-y-4">
+<div class="text-gray-500 border-r border-gray-900 no-scrollbar h-screen w-[360px] pb-36">
+  <div class="space-y-4 p-5">
     @for (menuLink of itemMenu1; track menuLink.label) {
     <span class="flex items-center gap-4 hover:text-white cursor-pointer"> <fa-icon [icon]="menuLink.icon"></fa-icon> {{ menuLink.label }} </span>
     }
@@ -12,9 +12,15 @@
     }
 
     <hr class="border-t-[0.1px] border-gray-900" />
+  </div>
 
-    <span class="flex items-center gap-4 hover:text-white cursor-pointer"> Playlist..</span>
-    <span class="flex items-center gap-4 hover:text-white cursor-pointer"> Playlist.. </span>
-    <span class="flex items-center gap-4 hover:text-white cursor-pointer">Playlist.. </span>
+  <div class="py-3">
+    @if (playlists().length > 0 && !loading()) { @for (playlist of playlists(); track playlist.title) {
+    <app-playlist-item [playlist]="playlist" [owner]="authService.fetchUser().value?.firstName ?? ''" (playlistClick)="onPlaylistClick($event)"></app-playlist-item>
+    } } @else if (loading()) {
+    <div class="flex justify-center items-center">
+      <fa-icon icon="circle-notch" animation="spin" class="text-green-600 text-4xl"></fa-icon>
+    </div>
+    }
   </div>
 </div>

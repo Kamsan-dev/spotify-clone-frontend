@@ -111,3 +111,11 @@ h2 {
 .p-inputtext:hover {
   border-color: $spotifyGreen;
 }
+
+.p-toast.p-toast-bottom-center {
+  bottom: 100px;
+}
+
+.green-spotify {
+  color: $spotifyGreen !important;
+}

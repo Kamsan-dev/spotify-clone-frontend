@@ -1,17 +1,16 @@
 import { ChangeDetectionStrategy, Component, effect, inject, OnDestroy, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SaveSong } from '../../model/song.model';
-import { ToastService } from '../../../layout/toast.service';
-import { SongService } from '../../song.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
-import { JsonPipe } from '@angular/common';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ToastService } from '../../../layout/toast.service';
+import { SaveSong } from '../../model/song.model';
+import { SongService } from '../../song.service';
 
 @Component({
   selector: 'app-new-song',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe, FontAwesomeModule],
+  imports: [ReactiveFormsModule, FontAwesomeModule],
   templateUrl: './new-song.component.html',
   styleUrl: './new-song.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -107,7 +106,6 @@ export class NewSongComponent implements OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.songToCreate);
     this.loading.set(true);
     this.songService.saveSong(this.songToCreate);
   }
