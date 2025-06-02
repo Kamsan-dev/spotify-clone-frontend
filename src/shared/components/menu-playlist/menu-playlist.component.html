@@ -1,0 +1,20 @@
+<p-menu #menu [model]="currentMenuItems" [popup]="true" styleClass="mt-1" appendTo="body">
+  <ng-template let-item pTemplate="item">
+    <div class="flex items-center gap-2 p-3 justify-between">
+      <div class="flex items-center">
+        <img [src]="item.image" alt="playlist cover" width="40" height="40" class="rounded mr-1" />
+        <span>{{ item.label }}</span>
+      </div>
+      @if (isSongInPlaylist(item.publicId)){
+      <fa-icon [icon]="'circle-check'" class="p-2 fa-fw green-spotify cursor-pointer"></fa-icon>
+      } @else {
+      <fa-icon [icon]="'circle-plus'" class="p-2 fa-fw cursor-pointer"></fa-icon>
+      }
+    </div>
+  </ng-template>
+</p-menu>
+@if (song()?.favorite){
+<fa-icon [icon]="'circle-check'" class="icon fa-fw green-spotify" (click)="menu.toggle($event)"></fa-icon>
+} @else {
+<fa-icon [icon]="'circle-plus'" class="icon fa-fw" (click)="menu.toggle($event)"></fa-icon>
+}

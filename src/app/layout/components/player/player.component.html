@@ -11,7 +11,7 @@
       <fa-icon [icon]="'shuffle'" class="icon fa-fw"></fa-icon>
       <fa-icon [icon]="'backward-step'" class="icon fa-fw"></fa-icon>
 
-      @if (isPlaying()){
+      @if (player.isPlaying()){
       <fa-icon [icon]="'pause'" class="icon--major fa-fw" (click)="pause($event)"></fa-icon>
       } @else {
       <fa-icon [icon]="'play'" class="icon--major fa-fw play-icon-svg" (click)="play($event)"></fa-icon>

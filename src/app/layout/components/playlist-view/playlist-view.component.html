@@ -1,9 +1,8 @@
 <app-playlist-header-bar [playlist]="playlist()" [songsNumber]="songs().length" [totalDuration]="totalDuration()"></app-playlist-header-bar>
-
 <div class="px-6 text-gray-500">
   <div class="grid grid-cols-2 px-5 py-2 separation">
     <div class="flex items-center space-x-4">
-      <span>#</span>
+      <span class="w-8 text-center">#</span>
       <span class="w-36 lg:w-64">Title</span>
     </div>
     <div class="flex items-center justify-between ml-auto md:ml-0">
@@ -11,13 +10,21 @@
       <span> <fa-icon [icon]="'clock'"></fa-icon></span>
     </div>
   </div>
-  @for (song of songs(); track song.title; let index = $index){
+  @for (song of songs(); track song.publicId; let index = $index){
   <div class="grid grid-cols-2 py-2 px-5 hover:bg-[#121212] rounded">
     <div class="flex items-center space-x-4">
-      <span>{{ index + 1 }}</span>
+      <span (mouseenter)="hoveredIndex.set(index)" (mouseleave)="hoveredIndex.set(null)" class="inline-block w-8 text-center">
+        @if (hoveredIndex() === index) { @if(songPlayed()?.publicId === song.publicId && player.isPlaying()){
+        <fa-icon [icon]="'pause'" class="text-white" (click)="pause($event)"></fa-icon>
+        } @else {
+        <fa-icon [icon]="'play'" class="text-white" (click)="play(song)"></fa-icon>
+        } } @else {
+        {{ index + 1 }}
+        }
+      </span>
       <img class="h-10 w-10" [src]="'data:' + song.cover?.fileContentType + ';base64,' + song.cover?.file" alt="song-cover" />
       <div class="flex flex-col gap-1">
-        <span class="w-36 lg:w-64 truncate text-white">{{ song.title.value }}</span>
+        <span class="w-36 lg:w-64 truncate text-white" [ngClass]="{ 'green-spotify': songPlayed()?.publicId === song.publicId }">{{ song.title.value }}</span>
         <span class="w-40">{{ song.artist.value }}</span>
       </div>
     </div>
@@ -26,11 +33,7 @@
       <span class="hidden md:inline w-40">{{ song.dateAdded | date : 'd MMMM, y' }}</span>
       <div class="flex items-center gap-2">
         <div class="cursor-pointer">
-          @if (song.favorite){
-          <fa-icon [icon]="'circle-check'" class="p-2 fa-fw green-spotify"></fa-icon>
-          } @else {
-          <fa-icon [icon]="'circle-plus'" class="p-2 fa-fw"></fa-icon>
-          }
+          <app-menu-playlist [song]="song" [menuFromPlayer]="false"></app-menu-playlist>
         </div>
         <span class="duration">{{ song.duration.value | duration }}</span>
       </div>

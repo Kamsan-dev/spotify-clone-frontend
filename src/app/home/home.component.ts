@@ -81,6 +81,7 @@ export class HomeComponent implements OnInit {
       () => {
         const stateDelete = this.playlistService.deleteSig();
         if (stateDelete.status === 'OK' && stateDelete.value) {
+          console.log('home delete');
           this.updateSongsCollection(stateDelete.value);
           this.toastService.send({
             severity: 'success',

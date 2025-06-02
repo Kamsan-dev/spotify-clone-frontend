@@ -62,12 +62,14 @@ export class PlaylistService {
     });
   }
 
-  public delete(playlistPublicId: string, songPublicId: string) {
+  public delete(playlistPublicId: string, songPublicId: string, requestFromPlayer: boolean = true) {
     let params = new HttpParams().set('playlistPublicId', playlistPublicId).set('songPublicId', songPublicId);
     this.http.delete<ReadSongInfo>(`${environment.API_URL}/playlist/delete-song-from-playlist`, { params }).subscribe({
       next: (song: ReadSongInfo) => {
         this.delete$.set(State.Builder<ReadSongInfo>().forSuccess(song));
-        this.songContentService.songPlayed.set(song);
+        if (requestFromPlayer) {
+          this.songContentService.songPlayed.set(song);
+        }
       },
       error: (err: HttpErrorResponse) => this.delete$.set(State.Builder<ReadSongInfo>().forError(err)),
     });
@@ -87,5 +89,9 @@ export class PlaylistService {
 
   public resetAdd(): void {
     this.add$.set(State.Builder<ReadSongInfo>().forInit());
+  }
+
+  public resetOne(): void {
+    this.getOne$.set(State.Builder<DisplayPlaylistDetail>().forInit());
   }
 }

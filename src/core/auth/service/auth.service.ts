@@ -59,10 +59,7 @@ export class AuthService {
       )
       .subscribe((token) => {
         this.accessToken = token;
-        if (token === undefined) {
-          console.log('after f5');
-          this.fetchUserData(false);
-        }
+        this.fetchUserData(false);
       });
   }
 

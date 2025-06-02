@@ -1,19 +1,18 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, effect, ElementRef, inject, signal, ViewChild, WritableSignal } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ToastService } from '../../toast.service';
-import { SongService } from '../../../song/song.service';
-import { SongContentService } from '../../../song/song-content.service';
-import { ReadSongInfo, SongContent } from '../../../song/model/song.model';
-import { DurationPipe } from '../../../../shared/pipe/duration.pipe';
-import { Howl } from 'howler';
+import { AfterViewInit, ChangeDetectionStrategy, Component, effect, ElementRef, inject, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DurationHowlerPipe } from '../../../../shared/pipe/duration-format.pipe';
-import { Icon, IconProp } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
-import { DisplayPlaylist } from '../../../playlist/model/playlist.model';
+import { combineLatest } from 'rxjs';
+import { DurationHowlerPipe } from '../../../../shared/pipe/duration-format.pipe';
+import { DurationPipe } from '../../../../shared/pipe/duration.pipe';
 import { PlaylistService } from '../../../playlist/playlist.service';
+import { ReadSongInfo, SongContent } from '../../../song/model/song.model';
+import { SongContentService } from '../../../song/song-content.service';
+import { SongService } from '../../../song/song.service';
+import { ToastService } from '../../toast.service';
 import { PlayerSongSectionComponent } from './player-song-section/player-song-section.component';
+import { PlayerService } from './player.service';
 
 @Component({
   selector: 'app-player',
@@ -23,24 +22,21 @@ import { PlayerSongSectionComponent } from './player-song-section/player-song-se
   styleUrl: './player.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerComponent implements AfterViewInit {
+export class PlayerComponent implements OnInit, AfterViewInit {
   songService = inject(SongService);
   toastService = inject(ToastService);
   songContentService = inject(SongContentService);
   playlistService = inject(PlaylistService);
+  player = inject(PlayerService);
 
   songContent: SongContent | undefined = undefined;
   song: WritableSignal<ReadSongInfo | undefined> = signal(undefined);
-  currentHowlInstance: Howl | undefined;
-
-  isPlaying = signal(false);
 
   currentVolume = signal(0.2);
   volumeIcon: WritableSignal<IconProp> = signal('volume-high');
-  private volumeBeforeMute = 0;
+
   progress = signal(0.0);
   duration = signal(0.0);
-  private animationFrameId: number | undefined;
 
   // Detect WebKit-based browsers to apply browser-specific styles for the range input
   isWebkit = /AppleWebKit/.test(navigator.userAgent);
@@ -51,6 +47,14 @@ export class PlayerComponent implements AfterViewInit {
   constructor() {
     this.listenToFetchSongContent();
     this.listenToFetchSongInfo();
+  }
+  public ngOnInit(): void {
+    combineLatest([this.player.progressObs, this.player.durationObs]).subscribe(([progress, duration]) => {
+      this.listenToTrackProgress(progress, duration);
+    });
+
+    this.player.volumeObs.subscribe((volume) => this.listenToVolumeUpdate(volume));
+    this.player.volumeIconObs.subscribe((icon: IconProp) => this.setVolumeIcon(icon));
   }
   public ngAfterViewInit(): void {
     /* visual update for webkit browsers */
@@ -66,7 +70,7 @@ export class PlayerComponent implements AfterViewInit {
         if (state.status === 'OK' && state.value) {
           this.songContent = state.value;
           // play music here
-          this.initHowlInstance();
+          this.player.initHowlInstance(this.songContent.fileContentType!, this.songContent.file!);
         } else if (state.status === 'ERROR') {
           this.toastService.send({
             severity: 'error',
@@ -88,59 +92,23 @@ export class PlayerComponent implements AfterViewInit {
     );
   }
 
-  private initHowlInstance(): void {
-    const newHowlInstance = new Howl({
-      src: [`data:${this.songContent?.fileContentType};base64,${this.songContent?.file}`],
-      html5: true,
-      volume: 0.2,
-      onplay: () => {
-        this.trackProgress();
-        this.onPlay();
-      },
-      onpause: () => this.onPause(),
-      onvolume: () => this.setVolumeIcon(),
-      onmute: () => this.setVolumeIcon(),
-      onend: () => this.onPause(),
-    });
-
-    if (this.currentHowlInstance) {
-      this.currentHowlInstance.stop();
-    }
-
-    this.currentHowlInstance = newHowlInstance;
-    this.currentHowlInstance.play();
-  }
-
-  private onPlay(): void {
-    this.isPlaying.set(true);
-  }
-  private onPause(): void {
-    this.isPlaying.set(false);
-  }
-
   //#region player buttons
 
   public play(event: MouseEvent | TouchEvent) {
     event.stopImmediatePropagation();
-    if (this.currentHowlInstance) {
-      this.currentHowlInstance.play();
-    }
+    this.player.play();
   }
 
   public pause(event: MouseEvent | TouchEvent): void {
     event.stopImmediatePropagation();
-    if (this.currentHowlInstance) {
-      this.currentHowlInstance.pause();
-      this.currentHowlInstance.seek();
-    }
+    this.player.pause();
   }
 
   public onSeekPosition(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
-    if (this.currentHowlInstance) {
-      this.currentHowlInstance.seek(Number(value));
+    if (this.player.currentHowlInstance) {
+      this.player.onSeekPosition(Number(value));
       this.progress.set(Number(value));
-
       /* visual update for webkit browsers */
       const v = (this.progress() * 100) / this.duration();
       updateSliderVisual(this.audioSlider, v.toString());
@@ -149,61 +117,42 @@ export class PlayerComponent implements AfterViewInit {
 
   public onVolumeUpdate(event: Event): void {
     const value = Number((event.target as HTMLInputElement).value);
-    if (this.currentHowlInstance) {
-      this.currentVolume.set(value);
-      this.currentHowlInstance.volume(value);
-
-      /* visual update for webkit browsers */
-      const v = (this.currentVolume() * 100) / 1;
-      updateSliderVisual(this.volumeSlider, v.toString());
+    if (this.player.currentHowlInstance) {
+      this.player.onVolumeUpdate(value);
     }
   }
 
   public onMuteVolume(event: TouchEvent | MouseEvent): void {
     event.stopImmediatePropagation();
-    if (this.currentHowlInstance) {
-      if (this.currentHowlInstance.mute()) {
-        this.currentHowlInstance.mute(false);
-        this.currentHowlInstance.volume(this.volumeBeforeMute);
-        this.currentVolume.set(this.volumeBeforeMute);
-      } else {
-        this.volumeBeforeMute = this.currentHowlInstance.volume();
-        this.currentHowlInstance.mute(true);
-        this.currentVolume.set(0);
-      }
+    if (this.player.currentHowlInstance) {
+      this.player.onMuteVolume();
       /* visual update for webkit browsers */
       const v = (this.currentVolume() * 100) / 1;
       updateSliderVisual(this.volumeSlider, v.toString());
     }
   }
 
-  private setVolumeIcon(): void {
-    if (this.currentHowlInstance) {
-      const volume = this.currentHowlInstance.volume();
-      if (volume === 0 || this.currentHowlInstance.mute()) {
-        this.volumeIcon.set('volume-xmark');
-      } else if (volume > 0 && volume <= 0.3) {
-        this.volumeIcon.set('volume-low');
-      } else {
-        this.volumeIcon.set('volume-high');
-      }
+  private setVolumeIcon(icon: IconProp): void {
+    this.volumeIcon.set(icon);
+  }
+
+  private listenToTrackProgress(progress: number, duration: number): void {
+    if (this.player.currentHowlInstance) {
+      this.progress.set(progress);
+      this.duration.set(duration);
+      /* visual update for webkit browsers */
+      const v = (this.progress() * 100) / this.duration();
+      updateSliderVisual(this.audioSlider, v.toString());
     }
   }
 
-  private trackProgress(): void {
-    const updateProgress = () => {
-      if (this.currentHowlInstance?.playing()) {
-        const progress = this.currentHowlInstance.seek() as number;
-        this.progress.set(Math.floor(progress));
-        this.duration.set(this.currentHowlInstance.duration());
-
-        /* visual update for webkit browsers */
-        const v = (this.progress() * 100) / this.duration();
-        this.audioSlider.nativeElement.style.setProperty('--value', v.toString() + '%');
-      }
-      this.animationFrameId = requestAnimationFrame(updateProgress);
-    };
-    this.animationFrameId = requestAnimationFrame(updateProgress);
+  private listenToVolumeUpdate(volume: number): void {
+    if (this.player.currentHowlInstance) {
+      /* visual update for webkit browsers */
+      this.currentVolume.set(volume);
+      const v = (this.currentVolume() * 100) / 1;
+      updateSliderVisual(this.volumeSlider, v.toString());
+    }
   }
 }
 
