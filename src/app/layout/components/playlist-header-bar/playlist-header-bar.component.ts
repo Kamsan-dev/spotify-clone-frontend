@@ -1,25 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, effect, inject, input, OnInit, signal, WritableSignal } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { User } from '../../../../core/auth/model/user.model';
 import { AuthService } from '../../../../core/auth/service/auth.service';
-import { AvatarComponent } from '../avatar/avatar.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PlaylistCardComponent } from '../../../../shared/components/playlist-card/playlist-card.component';
-import { PlayerSongSectionComponent } from '../player/player-song-section/player-song-section.component';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { DisplayPlaylist, DisplayPlaylistDetail } from '../../../playlist/model/playlist.model';
+import { DurationPipe } from '../../../../shared/pipe/duration.pipe';
 
 declare type HeaderType = 'playlist' | 'home';
 
 @Component({
   selector: 'app-playlist-header-bar',
   standalone: true,
-  imports: [AvatarComponent, CommonModule, FontAwesomeModule, PlaylistCardComponent, PlayerSongSectionComponent],
+  imports: [AvatarComponent, CommonModule, FontAwesomeModule, PlaylistCardComponent, DurationPipe],
   templateUrl: './playlist-header-bar.component.html',
   styleUrl: './playlist-header-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaylistHeaderBarComponent implements OnInit {
   headerType = input<HeaderType>('playlist');
+
+  playlist = input<DisplayPlaylistDetail>();
+  songsNumber = input<number>();
+  totalDuration = input<number>(0);
+
   private http = inject(HttpClient);
   public authService = inject(AuthService);
 

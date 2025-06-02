@@ -10,6 +10,7 @@ import { AuthService } from '../../../../core/auth/service/auth.service';
 import { PlaylistItemComponent } from './playlist-item/playlist-item.component';
 import { NewPlaylistComponent } from '../../../playlist/dialog/new-playlist/new-playlist.component';
 import { take } from 'rxjs';
+import { Router } from '@angular/router';
 
 export interface MenuItem {
   label: string;
@@ -34,6 +35,7 @@ export class SidebarComponent implements OnInit {
   toastService = inject(ToastService);
   authService = inject(AuthService);
   cdr = inject(ChangeDetectorRef);
+  router = inject(Router);
 
   playlists: WritableSignal<Array<DisplayPlaylist>> = signal<DisplayPlaylist[]>([]);
   loading = signal(false);
@@ -55,6 +57,10 @@ export class SidebarComponent implements OnInit {
       {
         label: 'Home',
         icon: 'home',
+        command: () => {
+          console.log('toast');
+          this.router.navigate(['home']);
+        },
       },
       {
         label: 'Search',
@@ -146,6 +152,12 @@ export class SidebarComponent implements OnInit {
   }
 
   onPlaylistClick(playlist: DisplayPlaylist): void {
-    console.log(playlist);
+    this.router.navigate(['playlist'], {
+      queryParams: {
+        publicId: playlist.publicId,
+      },
+    });
+
+    console.log('click_playlist');
   }
 }

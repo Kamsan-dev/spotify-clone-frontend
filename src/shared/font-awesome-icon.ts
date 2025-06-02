@@ -5,6 +5,7 @@ import {
   faCircleCheck,
   faCircleNotch,
   faCirclePlus,
+  faClock,
   faForwardStep,
   faHeart,
   faHouse,
@@ -44,4 +45,5 @@ export const fontAwesomeIcons: IconDefinition[] = [
   faVolumeHigh,
   faCirclePlus,
   faCircleCheck,
+  faClock,
 ];

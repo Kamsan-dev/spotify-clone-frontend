@@ -17,7 +17,7 @@ import { PlaylistService } from '../playlist/playlist.service';
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
   songService = inject(SongService);
   toastService = inject(ToastService);
   songContentService = inject(SongContentService);
@@ -112,10 +112,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       updated.splice(index, 1, song);
       this.songs.set(updated);
     }
-  }
-
-  ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
   }
   ngOnInit(): void {
     this.fetchAllSongs();

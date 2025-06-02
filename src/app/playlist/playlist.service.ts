@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { computed, inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { State } from '../../core/auth/model/state.mode';
 import { environment } from '../../environments/environment';
-import { DisplayPlaylist } from './model/playlist.model';
+import { DisplayPlaylist, DisplayPlaylistDetail } from './model/playlist.model';
 import { ReadSongInfo } from '../song/model/song.model';
 import { SongContentService } from '../song/song-content.service';
 
@@ -15,6 +15,9 @@ export class PlaylistService {
 
   private getAll$: WritableSignal<State<Array<DisplayPlaylist>>> = signal(State.Builder<Array<DisplayPlaylist>>().forInit());
   getAllSig = computed(() => this.getAll$());
+
+  private getOne$: WritableSignal<State<DisplayPlaylistDetail>> = signal(State.Builder<DisplayPlaylistDetail>().forInit());
+  getOneSig = computed(() => this.getOne$());
 
   private create$: WritableSignal<State<DisplayPlaylist>> = signal(State.Builder<DisplayPlaylist>().forInit());
   createSig = computed(() => this.create$());
@@ -37,6 +40,14 @@ export class PlaylistService {
     this.http.get<Array<DisplayPlaylist>>(`${environment.API_URL}/playlist/get-all`).subscribe({
       next: (playlists: Array<DisplayPlaylist>) => this.getAll$.set(State.Builder<Array<DisplayPlaylist>>().forSuccess(playlists)),
       error: (err: HttpErrorResponse) => this.getAll$.set(State.Builder<Array<DisplayPlaylist>>().forError(err)),
+    });
+  }
+
+  public getOne(playlistPublicId: string): void {
+    const params = new HttpParams().set('playlistPublicId', playlistPublicId);
+    this.http.get<DisplayPlaylistDetail>(`${environment.API_URL}/playlist/get-one`, { params }).subscribe({
+      next: (playlist: DisplayPlaylistDetail) => this.getOne$.set(State.Builder<DisplayPlaylistDetail>().forSuccess(playlist)),
+      error: (err: HttpErrorResponse) => this.getOne$.set(State.Builder<DisplayPlaylistDetail>().forError(err)),
     });
   }
 
