@@ -2,7 +2,7 @@ import { ReadSongInfo } from '../../song/model/song.model';
 
 export interface DisplayPlaylist {
   title: string;
-  isLikedSongs: boolean;
+  likedSongs: boolean;
   publicId: string;
   cover: PlaylistCover;
 }
@@ -14,7 +14,7 @@ export interface PlaylistCover {
 
 export interface DisplayPlaylistDetail {
   title: string;
-  isLikedSongs: boolean;
+  likedSongs: boolean;
   publicId: string;
   cover: PlaylistCover;
   songs: Array<ReadSongInfo>;

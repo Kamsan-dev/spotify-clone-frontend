@@ -2,13 +2,27 @@
 <div class="flex items-end space-x-7 h-80 text-white p-8" [ngClass]="'bg-gradient-to-b to-black ' + headerColor">
   @if (headerType() === 'playlist'){
   <div class="flex col items-end space-x-4">
-    <div class="h-44 w-44 shadow-2xl rounded bg-red-600"></div>
+    <div class="h-44 w-44 rounded">
+      @if (!playlist()?.likedSongs){
+      <img
+        class="h-full w-full rounded object-cover group-hover:brightness-50"
+        [src]="
+          'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/cd-mixtape-album-cover-artwork-template-design-e3e2c2f896f01776f67e015dcfa26fca_screen.jpg?ts=1745348577'
+        "
+        alt="playlist cover"
+      />
+      } @else {
+      <div class="w-full h-full flex rounded items-center justify-center bg-gradient-to-br from-purple-500 to-green-200 group-hover:brightness-50">
+        <fa-icon [icon]="'heart'" class="text-white text-6xl"></fa-icon>
+      </div>
+      }
+    </div>
 
     <div class="flex flex-col gap-2">
       <span class="text-2xl">Private playlist</span>
       <h1 class="text-2xl md:text-3xl xl:text-5xl font-bold">{{ playlist()?.title }}</h1>
       <span
-        >{{ user().firstName }} &bull; <span class="text-gray-500"> {{ songsNumber() }} titles &bull; {{ totalDuration() | duration : true }}</span></span
+        >{{ user().firstName }} &bull; <span class="text-gray-500 font-semibold"> {{ songsNumber() }} titles &bull; {{ totalDuration() | duration : true }}</span></span
       >
     </div>
   </div>

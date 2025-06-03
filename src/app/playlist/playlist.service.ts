@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { DisplayPlaylist, DisplayPlaylistDetail } from './model/playlist.model';
 import { ReadSongInfo } from '../song/model/song.model';
 import { SongContentService } from '../song/song-content.service';
+import { delay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -45,10 +46,13 @@ export class PlaylistService {
 
   public getOne(playlistPublicId: string): void {
     const params = new HttpParams().set('playlistPublicId', playlistPublicId);
-    this.http.get<DisplayPlaylistDetail>(`${environment.API_URL}/playlist/get-one`, { params }).subscribe({
-      next: (playlist: DisplayPlaylistDetail) => this.getOne$.set(State.Builder<DisplayPlaylistDetail>().forSuccess(playlist)),
-      error: (err: HttpErrorResponse) => this.getOne$.set(State.Builder<DisplayPlaylistDetail>().forError(err)),
-    });
+    this.http
+      .get<DisplayPlaylistDetail>(`${environment.API_URL}/playlist/get-one`, { params })
+      .pipe(delay(1000))
+      .subscribe({
+        next: (playlist: DisplayPlaylistDetail) => this.getOne$.set(State.Builder<DisplayPlaylistDetail>().forSuccess(playlist)),
+        error: (err: HttpErrorResponse) => this.getOne$.set(State.Builder<DisplayPlaylistDetail>().forError(err)),
+      });
   }
 
   public add(playlistPublicId: string, songPublicId: string) {
@@ -67,7 +71,7 @@ export class PlaylistService {
     this.http.delete<ReadSongInfo>(`${environment.API_URL}/playlist/delete-song-from-playlist`, { params }).subscribe({
       next: (song: ReadSongInfo) => {
         this.delete$.set(State.Builder<ReadSongInfo>().forSuccess(song));
-        if (requestFromPlayer) {
+        if (this.songContentService.songPlayed()?.publicId === song.publicId) {
           this.songContentService.songPlayed.set(song);
         }
       },

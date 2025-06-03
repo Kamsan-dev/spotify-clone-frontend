@@ -1,8 +1,9 @@
-import { DatePipe, JsonPipe, NgClass } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { map, Subject, takeUntil } from 'rxjs';
+import { MenuPlaylistComponent } from '../../../../shared/components/menu-playlist/menu-playlist.component';
 import { DurationPipe } from '../../../../shared/pipe/duration.pipe';
 import { DisplayPlaylistDetail } from '../../../playlist/model/playlist.model';
 import { PlaylistService } from '../../../playlist/playlist.service';
@@ -11,12 +12,11 @@ import { SongContentService } from '../../../song/song-content.service';
 import { ToastService } from '../../toast.service';
 import { PlayerService } from '../player/player.service';
 import { PlaylistHeaderBarComponent } from '../playlist-header-bar/playlist-header-bar.component';
-import { MenuPlaylistComponent } from '../../../../shared/components/menu-playlist/menu-playlist.component';
 
 @Component({
   selector: 'app-playlist-view',
   standalone: true,
-  imports: [PlaylistHeaderBarComponent, DurationPipe, DatePipe, FontAwesomeModule, NgClass, MenuPlaylistComponent, JsonPipe],
+  imports: [PlaylistHeaderBarComponent, DurationPipe, DatePipe, FontAwesomeModule, NgClass, MenuPlaylistComponent, RouterModule],
   templateUrl: './playlist-view.component.html',
   styleUrl: './playlist-view.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,5 +1,6 @@
 <app-playlist-header-bar [playlist]="playlist()" [songsNumber]="songs().length" [totalDuration]="totalDuration()"></app-playlist-header-bar>
 <div class="px-6 text-gray-500">
+  @if (songs().length > 0 && !loading()){
   <div class="grid grid-cols-2 px-5 py-2 separation">
     <div class="flex items-center space-x-4">
       <span class="w-8 text-center">#</span>
@@ -38,6 +39,14 @@
         <span class="duration">{{ song.duration.value | duration }}</span>
       </div>
     </div>
+  </div>
+  } } @else if (loading()){
+  <div class="flex justify-center items-center">
+    <fa-icon icon="circle-notch" animation="spin" class="text-green-600 text-4xl"></fa-icon>
+  </div>
+  } @else {
+  <div class="flex justify-center items-center h-48">
+    <p class="text-xl">Your playlist is empty. <a [routerLink]="['/home']">View library</a></p>
   </div>
   }
 </div>

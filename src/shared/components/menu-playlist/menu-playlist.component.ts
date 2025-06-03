@@ -56,9 +56,12 @@ export class MenuPlaylistComponent {
 
     menu = playlists.map((p) => ({
       label: p.title,
-      image: image,
+      //image: image,
+      image:
+        'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/cd-mixtape-album-cover-artwork-template-design-e3e2c2f896f01776f67e015dcfa26fca_screen.jpg?ts=1745348577',
       command: () => this.addOrDeleteSongPlaylist(p.publicId, this.song()?.publicId!),
       publicId: p.publicId,
+      likedSongs: p.likedSongs,
     }));
 
     return menu;

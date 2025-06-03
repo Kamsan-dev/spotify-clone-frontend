@@ -121,8 +121,9 @@ h2 {
 }
 
 .p-menu.p-menu-overlay {
-  background-color: #292929;
+  background-color: #2e2e33;
   .p-menuitem-content:hover {
-    background-color: #121212;
+    background-color: #595959;
+    border-radius: 0.25rem;
   }
 }
