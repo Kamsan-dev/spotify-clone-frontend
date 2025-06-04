@@ -2,19 +2,23 @@
 
 ### Key Features:
 
-- **Authentication**
-  Supports user authentication via Auth0, Okta, and Google.
+- 🔐 **Authentication**
 
-- 🎶➕ **Music Upload**
-  Users can upload their own music files to the platform.
+  - Supports user authentication via Auth0, Okta, and Google.
 
-- **Browse All Songs**
-  Displays a complete list of all available tracks.
+- ➕ **Music Upload**
+
+  - Users can upload their own music files to the platform.
+
+- 🎶 **Browse All Songs**
+
+  - Displays a complete list of all available tracks.
 
 - ❤️ **Add favorites songs to Playlists**
-  Users can mark songs as favorites and add them to their playlists.
 
-- **Playlists Management**
+  - Users can mark songs as favorites and add them to their playlists.
+
+- 📂 **Playlists Management**
 
   - Create new playlists
 
@@ -25,7 +29,7 @@
   - View and manage existing playlists
 
 - 🎧 **Music Streaming**
-  Stream and listen to music using Howler.js for seamless audio playback.
+  - Stream and listen to music using Howler.js for seamless audio playback.
 
 ## 🛠️ Tech Stack
 
