@@ -1,27 +1,62 @@
-# SpotifyCloneFrontend
+# Spotify clone application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
+### Key Features:
 
-## Development server
+- **Authentication**
+  Supports user authentication via Auth0, Okta, and Google.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- 🎶➕ **Music Upload**
+  Users can upload their own music files to the platform.
 
-## Code scaffolding
+- **Browse All Songs**
+  Displays a complete list of all available tracks.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- ❤️ **Add favorites songs to Playlists**
+  Users can mark songs as favorites and add them to their playlists.
 
-## Build
+- **Playlists Management**
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+  - Create new playlists
 
-## Running unit tests
+  - Add songs to a playlist
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+  - Remove tracks from a playlist
 
-## Running end-to-end tests
+  - View and manage existing playlists
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- 🎧 **Music Streaming**
+  Stream and listen to music using Howler.js for seamless audio playback.
 
-## Further help
+## 🛠️ Tech Stack
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- Framework: Angular 17
+
+- Server : Spring Boot 3.3
+
+- UI Library: PrimeNG 17
+
+- CSS Framework: Tailwind CSS
+
+- Database : PostgresSQL
+
+- API Communication: RESTful API integration
+
+## 💻 UI Preview
+
+#### Home
+
+<p align="center">
+    <img src="./src/assets/docs/home.PNG" alt=""/>
+</p>
+
+#### Save song
+
+<p align="center">
+    <img src="./src/assets/docs/save-song.PNG" alt=""/>
+</p>
+
+#### Manage playlist
+
+<p align="center">
+    <img src="./src/assets/docs/playlist.jpg" alt=""/>
+</p>

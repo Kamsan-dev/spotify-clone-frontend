@@ -157,7 +157,5 @@ export class SidebarComponent implements OnInit {
         publicId: playlist.publicId,
       },
     });
-
-    console.log('click_playlist');
   }
 }
